@@ -62,4 +62,4 @@ while i < len(cryptoNames):
         print ('Day '+str(j+1)+': '+str(cryptoValues[i][j]), end = ' ')
         j+=1
     print('\n')
-    i+=1
+    i+=1 
