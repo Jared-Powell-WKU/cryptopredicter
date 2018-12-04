@@ -16,14 +16,16 @@ else:
 if len(os.listdir(folder) ) < 25:
     exec(open('getPrice.py').read())
 cryptoValues = []
+mostRecentValue = []
 cryptoNames = []
 for filename in os.listdir(folder):
     # Attempt to predict using linear regression
     current = os.path.join(folder, filename)
-    with open(current) as cp:
-        data = json.load(cp)
+    with open(current) as c:
+        data = json.load(c)
     cryptoNames.append(json.dumps(data['coin']['name']))
     df = pd.read_json(json.dumps(data['data']))
+    mostRecentValue.append(data['data'][-1]['price'])
 
     forecast_col = 'price'
     forecast_out = 15 # How far to forecast 
@@ -32,7 +34,7 @@ for filename in os.listdir(folder):
     X_train, X_test, Y_train, Y_test , X_lately = prepare_data(df,forecast_col,forecast_out,test_size) # Prepare our data for fitting
     i = 0
     total = [0] * forecast_out
-    while i < 1000:
+    while i < 10000:
         learner = linear_model.LinearRegression() # Initializing linear regression model
 
         learner.fit(X_train,Y_train) # Training the linear regression model
@@ -54,12 +56,10 @@ for filename in os.listdir(folder):
         j+=1
     cryptoValues.append(total)
     print(json.dumps(data['coin']['name'])+" is now complete.")
-i = 0    
-while i < len(cryptoNames):
-    print(cryptoNames[i], end = ': ')
-    j = 0
-    while j < len(cryptoValues[i]):
-        print ('Day '+str(j+1)+': '+str(cryptoValues[i][j]), end = ' ')
-        j+=1
-    print('\n')
-    i+=1 
+for name, value, recent in zip(cryptoNames, cryptoValues, mostRecentValue):
+    print('%s (%s)' % (name, recent))
+    day = 1
+    for forecast in value:
+        print ('Day %s: %s' % (day, forecast))
+        day +=1
+    print()
