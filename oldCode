@@ -1,0 +1,12 @@
+# for filename in os.listdir(folder):
+#     current = os.path.join(folder, filename)
+#     with open(current) as c:
+#         data = json.load(c)
+#     dateMap = {} # Create Dictionary and load in all datapoints
+# for entry in data['data']:
+#     dateMap[entry['date']] = {'price':entry['price'], 'name':data['coin']['name']}
+
+# dateMapArr.append(dateMap)
+
+# for entry in data['data']:
+#     dateMap[entry['date']] = {'price':entry['price'], 'name':data['coin']['name']}
